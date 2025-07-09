@@ -13,6 +13,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Turnos {
-  id Int @id @default(autoincrement())
+model Module {
+  id            Int          @id
+  name          String       @unique
+  createAt      DateTime     @default(now())
+  Turns_modules TurnModule[]
+}
+
+model Turn {
+  id            Int          @id @unique
+  createAt      DateTime     @default(now())
+  Turns_modules TurnModule[]
+}
+
+model TurnModule {
+  id       Int      @id @default(autoincrement())
+  createAt DateTime @default(now())
+
+  turnId Int
+  Turn   Turn @relation(fields: [turnId], references: [id])
+
+  moduleId Int
+  Module   Module @relation(fields: [moduleId], references: [id])
 }
