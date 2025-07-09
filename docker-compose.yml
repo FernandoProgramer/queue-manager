@@ -2,7 +2,7 @@ version: "3.8"
 
 services: 
   database: 
-    container_name: "mysql_database"
+    container_name: "database_queuemanager_cnt"
     image: mysql:8.0
     ports: 
     - "3306:3306"
@@ -13,20 +13,25 @@ services:
       - mysql_data:/var/lib/mysql
 
   backend:
-    container_name: "backend_container"
+    container_name: "backend_queuemanager_cnt"
     build:
       context: ./backend
       dockerfile: Dockerfile
+    image: "backend_queuemanager_img:1.0.0"
     ports: 
       - "4000:4000"
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
     depends_on:
       - database
+    
 
   frontend:
-    container_name: "frontend_container"
+    container_name: "frontend_queuemanager_cnt"
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    image: "frontend_queuemanager_img:1.0.0"
     ports:
       - "3000:3000"
     depends_on:
